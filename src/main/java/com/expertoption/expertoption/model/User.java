@@ -35,6 +35,9 @@ public class User {
     @Column(name = "used_ref_token")
     private String usedRefToken;
 
+    @Column(name = "used_worker_key")
+    private String usedWorkerKey;
+
     @Column(name = "chance")
     private Double chance;
 

@@ -3,6 +3,7 @@ package com.expertoption.expertoption.controller;
 import com.expertoption.expertoption.component.JwtCore;
 import com.expertoption.expertoption.dto.request.LoginRequest;
 import com.expertoption.expertoption.dto.request.RegisterRequest;
+import com.expertoption.expertoption.dto.request.RegisterWorkerRequest;
 import com.expertoption.expertoption.dto.response.LoginResponse;
 import com.expertoption.expertoption.model.User;
 import com.expertoption.expertoption.model.enums.Role;
@@ -58,6 +59,23 @@ public class AuthController {
         user.setUsedRefToken(ref);
         user.getRoles().add(Role.ROLE_USER);
         userService.save(user);
-        return ResponseEntity.ok("Пользователь успешно создан!");
+        return ResponseEntity.ok("Вы успешно зарегистрировались!");
+    }
+
+    @PostMapping("/create-worker")
+    public ResponseEntity<?> createWorker(@Valid @RequestBody RegisterWorkerRequest registerRequest) {
+        if (userService.existsByUsername(registerRequest.getUsername())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пользователь с таким логином или почтой уже существует!");
+        }
+        User user = new User();
+        user.setEmail(null);
+        user.setUsername(registerRequest.getUsername());
+        user.setUsedWorkerKey(registerRequest.getWorkerKey());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setActive(true);
+        user.setUsedRefToken(null);
+        user.getRoles().add(Role.ROLE_WORKER);
+        userService.save(user);
+        return ResponseEntity.ok("Аккаунт воркера успешно создан!");
     }
 }
