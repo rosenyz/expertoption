@@ -1,6 +1,7 @@
 package com.expertoption.expertoption.configuration;
 
 import com.expertoption.expertoption.component.JwtRequestFilter;
+import com.expertoption.expertoption.model.enums.Role;
 import com.expertoption.expertoption.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +49,7 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/worker/**").hasRole("WORKER")
                         .anyRequest().permitAll());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

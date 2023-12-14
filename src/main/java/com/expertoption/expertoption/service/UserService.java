@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -28,6 +31,14 @@ public class UserService implements UserDetailsService {
 
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public List<User> findUsersByUsedRefToken(String refToken) {
+        return userRepository.findUsersByUsedRefToken(refToken);
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        return userRepository.findByUsername(principal.getName()).orElseThrow(null);
     }
 
     public void save(User user) {
