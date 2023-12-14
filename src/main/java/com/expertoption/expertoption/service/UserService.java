@@ -1,12 +1,11 @@
 package com.expertoption.expertoption.service;
 
-import com.expertoption.expertoption.dto.response.UserInfoResponse;
+import com.expertoption.expertoption.dto.response.UserInfoFWResponse;
 import com.expertoption.expertoption.model.User;
 import com.expertoption.expertoption.repository.UserRepository;
 import com.expertoption.expertoption.service.impl.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,24 +35,26 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByEmail(email);
     }
 
-    public List<UserInfoResponse> findUsersByUsedRefToken(String refToken) {
+    public List<UserInfoFWResponse> findUsersByUsedRefToken(String refToken) {
         List<User> users = userRepository.findUsersByUsedRefToken(refToken);
-        List<UserInfoResponse> usersInfo = new ArrayList<>();
+        List<UserInfoFWResponse> usersInfo = new ArrayList<>();
 
         for (User user : users)
         {
-            UserInfoResponse userInfoResponse = new UserInfoResponse(
+            UserInfoFWResponse userInfoFWResponse = new UserInfoFWResponse(
                     user.getId(),
                     user.getUsername(),
                     user.getEmail(),
                     user.getActive(),
                     user.getVerification(),
+                    user.getIsWithdrawAvailable(),
                     user.getUsedRefToken(),
                     user.getChance(),
                     user.getBalance(),
+                    user.getRoles(),
                     user.getDateOfCreate()
             );
-            usersInfo.add(userInfoResponse);
+            usersInfo.add(userInfoFWResponse);
         }
 
         return usersInfo;

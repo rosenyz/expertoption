@@ -6,6 +6,7 @@ import lombok.Data;
 public class UpdateRequest {
     private Boolean active;
     private Boolean verification;
+    private Boolean isWithdrawAvailable;
     private Double chance;
     private Double balance;
 }

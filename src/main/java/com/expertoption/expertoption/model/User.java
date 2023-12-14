@@ -29,6 +29,9 @@ public class User {
     @Column(name = "verification")
     private Boolean verification;
 
+    @Column(name = "is_withdraw_available")
+    private Boolean isWithdrawAvailable;
+
     @Column(name = "ref_token", unique = true)
     private String generatedRefToken;
 
@@ -70,6 +73,7 @@ public class User {
         this.chance = 0.5;
         this.balance = 0.0;
         this.verification = false;
+        this.isWithdrawAvailable = true;
         this.dateOfCreate = LocalDateTime.now();
     }
 }
