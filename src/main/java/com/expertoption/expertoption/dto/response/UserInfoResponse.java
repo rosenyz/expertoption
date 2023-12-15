@@ -16,7 +16,8 @@ public class UserInfoResponse {
     private String username;
     private Boolean verification;
     private Double balance;
-    private List<Bet> bets;
+    private Integer successBet;
+    private Integer loseBet;
     private Set<Role> roles;
     private LocalDateTime dateOfCreate;
 }

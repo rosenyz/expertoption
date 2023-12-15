@@ -2,6 +2,7 @@ package com.expertoption.expertoption.controller;
 
 import com.expertoption.expertoption.dto.response.UserInfoResponse;
 import com.expertoption.expertoption.model.User;
+import com.expertoption.expertoption.service.BetService;
 import com.expertoption.expertoption.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final BetService betService;
 
     @GetMapping("/info")
     public ResponseEntity<?> getInfoAboutUser(Principal principal) {
@@ -27,7 +29,8 @@ public class UserController {
                 user.getUsername(),
                 user.getVerification(),
                 user.getBalance(),
-                user.getBets(),
+                betService.findBetByStatusAndUser(true, user).size(),
+                betService.findBetByStatusAndUser(false, user).size(),
                 user.getRoles(),
                 user.getDateOfCreate()
         );

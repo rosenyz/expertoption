@@ -50,9 +50,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Bet> bets = new ArrayList<>();
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"))
@@ -61,11 +58,6 @@ public class User {
 
     @Column(name = "date_of_create")
     private LocalDateTime dateOfCreate;
-
-    public void addBetToUser(Bet bet) {
-        bet.setUser(this);
-        bets.add(bet);
-    }
 
     @PrePersist
     private void init() {

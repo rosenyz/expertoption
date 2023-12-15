@@ -19,7 +19,7 @@ public class Bet {
     private Long id;
 
     @Column(name = "bet_amount")
-    private Float amountOfBet;
+    private Double amountOfBet;
 
     @Column(name = "success")
     private Boolean status;
