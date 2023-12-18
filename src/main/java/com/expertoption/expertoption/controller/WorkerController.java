@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/worker")
@@ -21,7 +22,9 @@ public class WorkerController {
     public ResponseEntity<?> getWorkerUsers(Principal principal) {
         if (principal == null) { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User retrieval error"); }
         User user = userService.getUserByPrincipal(principal);
-        return ResponseEntity.ok(userService.findUsersByUsedRefToken(user.getGeneratedRefToken()));
+        List<UserInfoFWResponse> users = userService.findUsersByUsedRefToken(user.getGeneratedRefToken());
+        if (users.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("У Вас нету привязанных пользователей!"); }
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/users/{id}")
