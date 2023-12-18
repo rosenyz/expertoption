@@ -2,6 +2,7 @@ package com.expertoption.expertoption.service;
 
 import com.expertoption.expertoption.dto.response.UserInfoFWResponse;
 import com.expertoption.expertoption.model.User;
+import com.expertoption.expertoption.model.enums.Role;
 import com.expertoption.expertoption.repository.UserRepository;
 import com.expertoption.expertoption.service.impl.UserDetailsImpl;
 import jakarta.transaction.Transactional;
@@ -12,8 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +37,28 @@ public class UserService implements UserDetailsService {
 
     public List<UserInfoFWResponse> findUsersByUsedRefToken(String refToken) {
         List<User> users = userRepository.findUsersByUsedRefToken(refToken);
+        return getUserInfoFWResponses(users);
+    }
+
+    public List<UserInfoFWResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return getUserInfoFWResponses(users);
+    }
+
+    public List<UserInfoFWResponse> getAllUsersByRole(String role) {
+        List<User> notSortedUsers = userRepository.findAll();
+        List<User> users = new ArrayList<>();
+
+        for (User user : notSortedUsers) {
+            if (user.getRoles().contains(Role.valueOf(role))) {
+                users.add(user);
+            }
+        }
+
+        return getUserInfoFWResponses(users);
+    }
+
+    private List<UserInfoFWResponse> getUserInfoFWResponses(List<User> users) {
         List<UserInfoFWResponse> usersInfo = new ArrayList<>();
 
         for (User user : users)
