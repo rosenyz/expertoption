@@ -59,26 +59,6 @@ public class WorkerController {
         }
 
         User user = userService.findById(id);
-        if (updateRequest.getActive() != null) { user.setActive(updateRequest.getActive()); }
-        if (updateRequest.getVerification() != null) { user.setVerification(updateRequest.getVerification()); }
-        if (updateRequest.getIsWithdrawAvailable() != null) { user.setIsWithdrawAvailable(updateRequest.getIsWithdrawAvailable()); }
-        if (updateRequest.getChance() != null) { user.setChance(updateRequest.getChance()); }
-        if (updateRequest.getBalance() != null) { user.setBalance(updateRequest.getBalance()); }
-        userService.save(user);
-
-        UserInfoFWResponse userInfoFWResponse = new UserInfoFWResponse(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getActive(),
-                user.getVerification(),
-                user.getIsWithdrawAvailable(),
-                user.getUsedRefToken(),
-                user.getChance(),
-                user.getBalance(),
-                user.getRoles(),
-                user.getDateOfCreate()
-        );
-        return ResponseEntity.ok(userInfoFWResponse);
+        return userService.updateUserByEntity(updateRequest, user);
     }
 }

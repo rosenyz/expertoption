@@ -1,5 +1,6 @@
 package com.expertoption.expertoption.service;
 
+import com.expertoption.expertoption.dto.request.UpdateRequest;
 import com.expertoption.expertoption.dto.response.UserInfoFWResponse;
 import com.expertoption.expertoption.model.User;
 import com.expertoption.expertoption.model.enums.Role;
@@ -7,10 +8,12 @@ import com.expertoption.expertoption.repository.UserRepository;
 import com.expertoption.expertoption.service.impl.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 import java.util.*;
@@ -56,6 +59,30 @@ public class UserService implements UserDetailsService {
         }
 
         return getUserInfoFWResponses(users);
+    }
+
+    public ResponseEntity<?> updateUserByEntity(@RequestBody UpdateRequest updateRequest, User user) {
+        if (updateRequest.getActive() != null) { user.setActive(updateRequest.getActive()); }
+        if (updateRequest.getVerification() != null) { user.setVerification(updateRequest.getVerification()); }
+        if (updateRequest.getIsWithdrawAvailable() != null) { user.setIsWithdrawAvailable(updateRequest.getIsWithdrawAvailable()); }
+        if (updateRequest.getChance() != null) { user.setChance(updateRequest.getChance()); }
+        if (updateRequest.getBalance() != null) { user.setBalance(updateRequest.getBalance()); }
+        userRepository.save(user);
+
+        UserInfoFWResponse userInfoFWResponse = new UserInfoFWResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getActive(),
+                user.getVerification(),
+                user.getIsWithdrawAvailable(),
+                user.getUsedRefToken(),
+                user.getChance(),
+                user.getBalance(),
+                user.getRoles(),
+                user.getDateOfCreate()
+        );
+        return ResponseEntity.ok(userInfoFWResponse);
     }
 
     private List<UserInfoFWResponse> getUserInfoFWResponses(List<User> users) {

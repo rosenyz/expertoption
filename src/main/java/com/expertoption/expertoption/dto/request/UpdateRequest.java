@@ -9,4 +9,5 @@ public class UpdateRequest {
     private Boolean isWithdrawAvailable;
     private Double chance;
     private Double balance;
+    private String usedRefToken;
 }
