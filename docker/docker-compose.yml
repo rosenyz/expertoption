@@ -21,6 +21,6 @@ services:
       - '5432'
     environment:
       - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=W200505t
+      - POSTGRES_PASSWORD=SOMEPASSWORD
       - POSTGRES_HOST_AUTH_METHOD=trust
       - PGDATA=/var/lib/postgresql/data/pgdata
