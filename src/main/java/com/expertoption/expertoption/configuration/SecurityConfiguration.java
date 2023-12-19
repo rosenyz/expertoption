@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/worker/**").hasRole("WORKER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/**", "/api/bets/**").authenticated()
                         .anyRequest().permitAll());
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
